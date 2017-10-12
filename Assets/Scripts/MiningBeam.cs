@@ -6,22 +6,23 @@ public class MiningBeam : MonoBehaviour {
 
     public float mineRange;
 
-    private float oreQuantity = 0f;
     private GameObject toMine;
     private Rigidbody toMineRB;
+
+    private InventoryController playerInventory;
 
     // Update is called once per frame
     void FixedUpdate () {
         RaycastHit hit;
         Ray miningRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Input.GetMouseButtonDown(0)) {
-            if (Physics.Raycast(miningRay, out hit, mineRange)) {
-                toMine = hit.transform.gameObject;
-                toMineRB = GetComponent<Rigidbody>();
-                oreQuantity += toMineRB.mass;
-                GameObject.Destroy(toMine);
-                Debug.Log(oreQuantity);
+        if (Input.GetMouseButtonDown(0)) {//if clicking with LMB
+            if (Physics.Raycast(miningRay, out hit, mineRange)) {//shoot ray
+                toMine = hit.transform.gameObject; //assign collided object
+                toMineRB = toMine.GetComponent<Rigidbody>();//get collided objects Rigidbody
+                playerInventory = gameObject.GetComponent<InventoryController>();//references the player inventory script
+                playerInventory.oreQuantity += toMineRB.mass;//add collided Rigidbodies mass to a counter inside the player inventory
+                GameObject.Destroy(toMine);//destroy collided object
             }
         }
 	}
